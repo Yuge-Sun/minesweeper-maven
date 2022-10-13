@@ -1,5 +1,5 @@
+import java.security.SecureRandom;
 import java.util.Objects;
-import java.util.Random;
 
 
 public class board {
@@ -10,8 +10,8 @@ public class board {
     boolean[][] bombGrid = new boolean[difficultyY][difficultyX]; //bomb
     String [][] UIGrid = new String[difficultyY][difficultyX];
     int[][] adjacentNum = new int [difficultyY][difficultyX];
-
     int flagCount = 0;
+    SecureRandom rand = new SecureRandom();
 
     public void difficultySelect (int num) {
         if (num == 1) {
@@ -89,7 +89,6 @@ public class board {
             for (int i = 1; i < difficultyY-1 ; i++) {
                 for (int j = 1; j < difficultyX-1 ; j++) {
                     if (i != y && j != x && !bombGrid[i][j]) {
-                        Random rand = new Random();
                         int n = rand.nextInt(100);
                         if (n == 1 && numOfBombs != bombNum) {
                             bombGrid[i][j] = true;
