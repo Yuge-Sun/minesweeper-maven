@@ -1,24 +1,45 @@
-import java.security.SecureRandom;
 import java.util.Objects;
+import java.util.Random;
 
 
 public class board {
-    boolean[][] bombGrid = new boolean[11][11]; //bomb
 
-    String [][] UIGrid = new String[11][11];
-
-    int[][] adjacentNum = new int [11][11];
+    int difficultyX ;
+    int difficultyY;
+    int bombNum;
+    boolean[][] bombGrid = new boolean[difficultyY][difficultyX]; //bomb
+    String [][] UIGrid = new String[difficultyY][difficultyX];
+    int[][] adjacentNum = new int [difficultyY][difficultyX];
 
     int flagCount = 0;
 
-    SecureRandom rand = new SecureRandom();
+    public void difficultySelect (int num) {
+        if (num == 1) {
+            this.difficultyX = 11;
+            this.difficultyY = 11;
+            this.bombNum = 10;
+        }
+        else if (num == 2) {
+            this.difficultyX = 18;
+            this.difficultyY = 18;
+            this.bombNum = 40;
+        }
+        else {
+            this.difficultyX = 32;
+            this.difficultyY = 18;
+            this.bombNum = 99;
+        }
+    }
 
     public void initialiseBoard() {
         flagCount = 0;
-        for (int i = 0; i < 11; i++) {
-            for (int j = 0; j < 11; j++) {
+        bombGrid = new boolean[difficultyY][difficultyX]; //bomb
+        UIGrid = new String[difficultyY][difficultyX];
+        adjacentNum = new int [difficultyY][difficultyX];
+        for (int i = 0; i < difficultyY; i++) {
+            for (int j = 0; j < difficultyX; j++) {
                 this.bombGrid[i][j] = false;
-                if (i == 0 || i == 10 || j == 0 || j == 10) {
+                if (i == 0 || i == difficultyY-1 || j == 0 || j == difficultyX-1) {
                     this.adjacentNum[i][j] = -1;
                     this.UIGrid[i][j] = " ";
                 }
@@ -32,32 +53,31 @@ public class board {
 
     public String printLand(int i, int j) {
         if (Objects.equals(UIGrid[i][j], "F") || Objects.equals(UIGrid[i][j], "B") ){
-            return colours.ANSI_RED + UIGrid[i][j] + colours.ANSI_RESET;
+            return ANSI_RED + UIGrid[i][j] + ANSI_RESET;
         }
         else if (Objects.equals(UIGrid[i][j], "0")) {
             return UIGrid[i][j];
         }
         else {
-            return colours.ANSI_GREEN + UIGrid[i][j] + colours.ANSI_RESET;
+            return ANSI_GREEN + UIGrid[i][j] + ANSI_RESET;
         }
     }
 
     public void printBoard() {
-        for (int i = 0; i < 10; i++){
-            if (i==0){
-                System.out.print(colours.ANSI_CYAN+"\t1\t2\t3\t4\t5\t6\t7\t8\t9\n"+colours.ANSI_RESET );
-            }
-            else{
-                for (int j = 0; j < 10; j++) {
-                    if (j == 0) {
-                        System.out.print(colours.ANSI_CYAN + i + colours.ANSI_RESET +"\t");
-                    }
-                    else {
-                        System.out.print(printLand(i,j)+"\t");
-                    }
-                    if (j == 9) {
-                        System.out.print("\n");
-                    }
+        for  (int x = 1 ; x < difficultyX-1 ; x++) {
+            System.out.print(ANSI_CYAN+"\t"+x+ANSI_RESET );
+        }
+        System.out.print("\n");
+        for (int i = 1; i < difficultyY-1 ; i++){
+            for (int j = 0; j < difficultyX-1 ; j++) {
+                if (j == 0) {
+                    System.out.print(ANSI_CYAN + i + ANSI_RESET +"\t");
+                }
+                else {
+                    System.out.print(printLand(i,j)+"\t");
+                }
+                if (j == difficultyX-2 ) {
+                    System.out.print("\n");
                 }
             }
         }
@@ -65,12 +85,13 @@ public class board {
 
     public void fillBoard(int x, int y) {
         int numOfBombs = 0;
-        while (numOfBombs <10) {
-           for (int i = 1; i < 10; i++) {
-                for (int j = 1; j < 10; j++) {
-                    if (i != y && j != x && bombGrid[i][j] != true) {
+        while (numOfBombs < bombNum) {
+            for (int i = 1; i < difficultyY-1 ; i++) {
+                for (int j = 1; j < difficultyX-1 ; j++) {
+                    if (i != y && j != x && !bombGrid[i][j]) {
+                        Random rand = new Random();
                         int n = rand.nextInt(100);
-                        if (n == 1 && numOfBombs != 10) {
+                        if (n == 1 && numOfBombs != bombNum) {
                             bombGrid[i][j] = true;
                             numOfBombs++;
                         }
@@ -81,9 +102,9 @@ public class board {
     }
 
     public void showBombs () {
-        for (int i = 1; i < 10; i++) {
-            for (int j = 1; j < 10; j++) {
-                if (bombGrid[i][j] == true) {
+        for (int i = 1; i < difficultyY; i++) {
+            for (int j = 1; j < difficultyX; j++) {
+                if (bombGrid[i][j]) {
                     UIGrid[i][j] = "B";
                 }
             }
@@ -91,23 +112,20 @@ public class board {
     }
 
     public void showAllNum () {
-        for (int i = 1; i < 10; i++) {
-            for (int j = 1; j < 10; j++) {
+        for (int i = 1; i < difficultyY-1 ; i++) {
+            for (int j = 1; j < difficultyX-1 ; j++) {
                 UIGrid[i][j] = String.valueOf(adjacentNum[i][j]);
             }
         }
     }
 
     public void calcAdjacentNum () {
-        for (int i = 1; i < 10; i++) {
-            for (int j = 1; j < 10; j++) {
+        for (int i = 1; i < difficultyY-1 ; i++) {
+            for (int j = 1; j < difficultyX-1 ; j++) {
                 for (int k = -1; k <2; k++) {
                     for (int l = -1; l <2; l++) {
-                        if (k==0 && l==0) {
-                            ;
-                        }
-                        else {
-                            if (bombGrid[i+k][j+l] == true) {
+                        if (!(k==0 && l==0)) {
+                            if (bombGrid[i + k][j + l]) {
                                 adjacentNum[i][j] += 1;
                             }
                         }
@@ -132,12 +150,7 @@ public class board {
     }
 
     public boolean isBomb (int x, int y) {
-        if (bombGrid[y][x]== true) {
-            return true;
-        }
-        else {
-            return false;
-        }
+        return bombGrid[y][x];
     }
 
     public void digLand (int x, int y) {
@@ -171,13 +184,13 @@ public class board {
 
     public boolean winCheck () {
         int correctFlag = 0;
-        for (int i = 1; i < 10; i++) {
-            for (int j = 1; j < 10; j++) {
+        for (int i = 1; i < difficultyY-1; i++) {
+            for (int j = 1; j < difficultyX-1; j++) {
                 if (Objects.equals(UIGrid[i][j], "◻")) {
                     return false;
                 }
                 else if (Objects.equals(UIGrid[i][j], "F")) {
-                    if (bombGrid[i][j] == true) {
+                    if (bombGrid[i][j]) {
                         correctFlag++;
                     }
                     else {
@@ -186,12 +199,18 @@ public class board {
                 }
             }
         }
-        if (correctFlag == 10){
-            return true;
-        }
-        else {
-            return false;
-        }
+        return correctFlag == bombNum;
     }
 
-    }
+
+    private static final String ANSI_RESET = "\u001B[0m";
+    private static final String ANSI_BLACK = "\u001B[30m";
+    private static final String ANSI_RED = "\u001B[31m";
+    private static final String ANSI_GREEN = "\u001B[32m";
+    private static final String ANSI_YELLOW = "\u001B[33m";
+    private static final String ANSI_BLUE = "\u001B[34m";
+    private static final String ANSI_PURPLE = "\u001B[35m";
+    private static final String ANSI_CYAN = "\u001B[36m";
+    private static final String ANSI_WHITE = "\u001B[37m";
+
+}
