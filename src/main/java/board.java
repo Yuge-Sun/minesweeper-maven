@@ -1,5 +1,5 @@
+import java.security.SecureRandom;
 import java.util.Objects;
-import java.util.Random;
 
 
 public class board {
@@ -10,6 +10,8 @@ public class board {
     int[][] adjacentNum = new int [11][11];
 
     int flagCount = 0;
+
+    SecureRandom rand = new SecureRandom();
 
     public void initialiseBoard() {
         flagCount = 0;
@@ -67,7 +69,6 @@ public class board {
            for (int i = 1; i < 10; i++) {
                 for (int j = 1; j < 10; j++) {
                     if (i != y && j != x && bombGrid[i][j] != true) {
-                        Random rand = new Random();
                         int n = rand.nextInt(100);
                         if (n == 1 && numOfBombs != 10) {
                             bombGrid[i][j] = true;
@@ -140,7 +141,7 @@ public class board {
     }
 
     public void digLand (int x, int y) {
-        if (UIGrid[y][x] == "◻" || UIGrid[y][x] == "F") {
+        if (Objects.equals(UIGrid[y][x], "◻") || Objects.equals(UIGrid[y][x], "F")) {
             UIGrid[y][x] = String.valueOf(adjacentNum[y][x]);
         }
         else {
@@ -153,7 +154,7 @@ public class board {
             for (int k = -1; k < 2; k++) {
                 for (int l = -1; l < 2; l++) {
                     if (!(k == 0 && l == 0)) {
-                        if (UIGrid[y + k][x + l] == "◻") {
+                        if (Objects.equals(UIGrid[y + k][x + l], "◻")) {
                             if (adjacentNum[y + k][x + l] == 0) {
                                 UIGrid[y + k][x + l] = String.valueOf(adjacentNum[y + k][x + l]);
                                 revealZeros(x + l, y + k);
@@ -172,10 +173,10 @@ public class board {
         int correctFlag = 0;
         for (int i = 1; i < 10; i++) {
             for (int j = 1; j < 10; j++) {
-                if (UIGrid[i][j] == "◻") {
+                if (Objects.equals(UIGrid[i][j], "◻")) {
                     return false;
                 }
-                else if (UIGrid[i][j] == "F") {
+                else if (Objects.equals(UIGrid[i][j], "F")) {
                     if (bombGrid[i][j] == true) {
                         correctFlag++;
                     }
