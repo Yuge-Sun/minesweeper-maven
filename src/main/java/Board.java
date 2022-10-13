@@ -2,13 +2,13 @@ import java.security.SecureRandom;
 import java.util.Objects;
 
 
-public class board {
+public class Board {
 
     int difficultyX ;
     int difficultyY;
     int bombNum;
     boolean[][] bombGrid = new boolean[difficultyY][difficultyX]; //bomb
-    String [][] UIGrid = new String[difficultyY][difficultyX];
+    String [][] uiGrid = new String[difficultyY][difficultyX];
     int[][] adjacentNum = new int [difficultyY][difficultyX];
     int flagCount = 0;
     SecureRandom rand = new SecureRandom();
@@ -34,32 +34,32 @@ public class board {
     public void initialiseBoard() {
         flagCount = 0;
         bombGrid = new boolean[difficultyY][difficultyX]; //bomb
-        UIGrid = new String[difficultyY][difficultyX];
+        uiGrid = new String[difficultyY][difficultyX];
         adjacentNum = new int [difficultyY][difficultyX];
         for (int i = 0; i < difficultyY; i++) {
             for (int j = 0; j < difficultyX; j++) {
                 this.bombGrid[i][j] = false;
                 if (i == 0 || i == difficultyY-1 || j == 0 || j == difficultyX-1) {
                     this.adjacentNum[i][j] = -1;
-                    this.UIGrid[i][j] = " ";
+                    this.uiGrid[i][j] = " ";
                 }
                 else {
                     this.adjacentNum[i][j] = 0;
-                    this.UIGrid[i][j] = "◻";
+                    this.uiGrid[i][j] = "◻";
                 }
             }
         }
     }
 
     public String printLand(int i, int j) {
-        if (Objects.equals(UIGrid[i][j], "F") || Objects.equals(UIGrid[i][j], "B") ){
-            return ANSI_RED + UIGrid[i][j] + ANSI_RESET;
+        if (Objects.equals(uiGrid[i][j], "F") || Objects.equals(uiGrid[i][j], "B") ){
+            return ANSI_RED + uiGrid[i][j] + ANSI_RESET;
         }
-        else if (Objects.equals(UIGrid[i][j], "0")) {
-            return UIGrid[i][j];
+        else if (Objects.equals(uiGrid[i][j], "0")) {
+            return uiGrid[i][j];
         }
         else {
-            return ANSI_GREEN + UIGrid[i][j] + ANSI_RESET;
+            return ANSI_GREEN + uiGrid[i][j] + ANSI_RESET;
         }
     }
 
@@ -104,7 +104,7 @@ public class board {
         for (int i = 1; i < difficultyY; i++) {
             for (int j = 1; j < difficultyX; j++) {
                 if (bombGrid[i][j]) {
-                    UIGrid[i][j] = "B";
+                    uiGrid[i][j] = "B";
                 }
             }
         }
@@ -113,7 +113,7 @@ public class board {
     public void showAllNum () {
         for (int i = 1; i < difficultyY-1 ; i++) {
             for (int j = 1; j < difficultyX-1 ; j++) {
-                UIGrid[i][j] = String.valueOf(adjacentNum[i][j]);
+                uiGrid[i][j] = String.valueOf(adjacentNum[i][j]);
             }
         }
     }
@@ -135,12 +135,12 @@ public class board {
     }
 
     public void flagLand (int x, int y) {
-        if (Objects.equals(UIGrid[y][x], "◻")) {
-            UIGrid[y][x] = "F";
+        if (Objects.equals(uiGrid[y][x], "◻")) {
+            uiGrid[y][x] = "F";
             flagCount++;
         }
-        else if (Objects.equals(UIGrid[y][x], "F")) {
-            UIGrid[y][x] = "◻";
+        else if (Objects.equals(uiGrid[y][x], "F")) {
+            uiGrid[y][x] = "◻";
             flagCount--;
         }
         else {
@@ -153,8 +153,8 @@ public class board {
     }
 
     public void digLand (int x, int y) {
-        if (Objects.equals(UIGrid[y][x], "◻") || Objects.equals(UIGrid[y][x], "F")) {
-            UIGrid[y][x] = String.valueOf(adjacentNum[y][x]);
+        if (Objects.equals(uiGrid[y][x], "◻") || Objects.equals(uiGrid[y][x], "F")) {
+            uiGrid[y][x] = String.valueOf(adjacentNum[y][x]);
         }
         else {
             System.out.println("Already dug, try again \n");
@@ -166,13 +166,13 @@ public class board {
             for (int k = -1; k < 2; k++) {
                 for (int l = -1; l < 2; l++) {
                     if (!(k == 0 && l == 0)) {
-                        if (Objects.equals(UIGrid[y + k][x + l], "◻")) {
+                        if (Objects.equals(uiGrid[y + k][x + l], "◻")) {
                             if (adjacentNum[y + k][x + l] == 0) {
-                                UIGrid[y + k][x + l] = String.valueOf(adjacentNum[y + k][x + l]);
+                                uiGrid[y + k][x + l] = String.valueOf(adjacentNum[y + k][x + l]);
                                 revealZeros(x + l, y + k);
                             }
                             else {
-                                UIGrid[y + k][x + l] = String.valueOf(adjacentNum[y + k][x + l]);
+                                uiGrid[y + k][x + l] = String.valueOf(adjacentNum[y + k][x + l]);
                             }
                         }
                     }
@@ -185,10 +185,10 @@ public class board {
         int correctFlag = 0;
         for (int i = 1; i < difficultyY-1; i++) {
             for (int j = 1; j < difficultyX-1; j++) {
-                if (Objects.equals(UIGrid[i][j], "◻")) {
+                if (Objects.equals(uiGrid[i][j], "◻")) {
                     return false;
                 }
-                else if (Objects.equals(UIGrid[i][j], "F")) {
+                else if (Objects.equals(uiGrid[i][j], "F")) {
                     if (bombGrid[i][j]) {
                         correctFlag++;
                     }
@@ -203,13 +203,8 @@ public class board {
 
 
     private static final String ANSI_RESET = "\u001B[0m";
-    private static final String ANSI_BLACK = "\u001B[30m";
     private static final String ANSI_RED = "\u001B[31m";
     private static final String ANSI_GREEN = "\u001B[32m";
-    private static final String ANSI_YELLOW = "\u001B[33m";
-    private static final String ANSI_BLUE = "\u001B[34m";
-    private static final String ANSI_PURPLE = "\u001B[35m";
     private static final String ANSI_CYAN = "\u001B[36m";
-    private static final String ANSI_WHITE = "\u001B[37m";
 
 }

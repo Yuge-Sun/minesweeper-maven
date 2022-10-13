@@ -3,7 +3,7 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        board board01 = new board();
+        Board board01 = new Board();
         Scanner userinput = new Scanner(System.in);
         while (true) {
             int uX;
@@ -30,7 +30,7 @@ public class Main {
                         maxInputX = 30;
                         maxInputY = 16;
                     }
-                    default -> System.out.println(wrongInput);
+                    default -> System.out.println(WRONG_INPUT);
                 }
                 if (difficultyNum == 1 || difficultyNum == 2 ||difficultyNum == 3 ) {
                     break;
@@ -39,10 +39,10 @@ public class Main {
 
             board01.initialiseBoard();
             board01.printBoard();
-            System.out.print("Please select a square to start digging \n"+enterX);
+            System.out.print("Please select a square to start digging \n"+ ENTER_X);
             uX = userinput.nextInt();
             userinput.nextLine();
-            System.out.print(enterY);
+            System.out.print(ENTER_Y);
             uY = userinput.nextInt();
             userinput.nextLine();
             board01.fillBoard(uX, uY);
@@ -57,14 +57,14 @@ public class Main {
                 System.out.println("Select an action next: \n(F)lag  or  (D)ig");
                 String input1 = userinput.nextLine();
                 if (Objects.equals(input1, "F") || Objects.equals(input1, "f")) {
-                    System.out.print("Please select a square to Flag \n" + enterX);
+                    System.out.print("Please select a square to Flag \n" + ENTER_X);
                     uX = userinput.nextInt();
                     userinput.nextLine();
-                    System.out.print(enterY);
+                    System.out.print(ENTER_Y);
                     uY = userinput.nextInt();
                     userinput.nextLine();
                     if(uX<1 || uX > maxInputX || uY < 1 || uY >maxInputY){
-                        System.out.println(outsideInput);
+                        System.out.println(OUTSIDE_INPUT);
                     }
                     else {
                         board01.flagLand (uX, uY) ;
@@ -82,21 +82,21 @@ public class Main {
                                     break;
                                 }
                                 else {
-                                    System.out.println(wrongInput);
+                                    System.out.println(WRONG_INPUT);
                                 }
                             }
                         }
                     }
                 }
                 else if (Objects.equals(input1, "D") || Objects.equals(input1, "d")) {
-                    System.out.print("Please select a square to dig \n"+enterX);
+                    System.out.print("Please select a square to dig \n"+ ENTER_X);
                     uX = userinput.nextInt();
                     userinput.nextLine();
-                    System.out.print(enterY);
+                    System.out.print(ENTER_Y);
                     uY = userinput.nextInt();
                     userinput.nextLine();
                     if( uX < 1 || uX > maxInputX || uY < 1 || uY > maxInputY ){
-                        System.out.println(outsideInput);
+                        System.out.println(OUTSIDE_INPUT);
                     }
                     else {
                         if (board01.isBomb(uX, uY)) {
@@ -116,7 +116,7 @@ public class Main {
                                     break;
                                 }
                                 else {
-                                    System.out.println(wrongInput);
+                                    System.out.println(WRONG_INPUT);
                                 }
                             }
                         }
@@ -137,7 +137,7 @@ public class Main {
                                         break;
                                     }
                                     else {
-                                        System.out.println(wrongInput);
+                                        System.out.println(WRONG_INPUT);
                                     }
                                 }
                             }
@@ -145,7 +145,7 @@ public class Main {
                     }
                 }
                 else {
-                    System.out.println(wrongInput);
+                    System.out.println(WRONG_INPUT);
                 }
                 if (!tryAgain) {
                     break;
@@ -157,10 +157,10 @@ public class Main {
         }
     }
 
-    private static final String wrongInput = "Wrong input, try again!";
-    private static final String outsideInput = "Outside of area, try again!";
-    private static final String enterX = "Enter X Coordinate: ";
-    private static final String enterY = "Enter Y Coordinate: ";
+    private static final String WRONG_INPUT = "Wrong input, try again!";
+    private static final String OUTSIDE_INPUT = "Outside of area, try again!";
+    private static final String ENTER_X = "Enter X Coordinate: ";
+    private static final String ENTER_Y = "Enter Y Coordinate: ";
 
 
 }
