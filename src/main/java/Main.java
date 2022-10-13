@@ -1,10 +1,11 @@
+import java.util.InputMismatchException;
 import java.util.Objects;
 import java.util.Scanner;
 
 public class Main {
+    static Scanner userInput = new Scanner(System.in);
     public static void main(String[] args) {
         Board board01 = new Board();
-        Scanner userinput = new Scanner(System.in);
         while (true) {
             int uX;
             int uY;
@@ -13,22 +14,23 @@ public class Main {
             boolean tryAgain = true;
             boolean resetBoard = false;
             System.out.println("Welcome to Minesweeper! Please select a difficulty:\n (1) Easy 9x9, 10 mines\n (2) Medium 16x16, 40 mines\n (3) Hard 30x16, 99 mines");
-            int difficultyNum = userinput.nextInt();
-            userinput.nextLine();
-            board01.difficultySelect (difficultyNum);
             while (true) {
+                int difficultyNum = getInt();
                 switch (difficultyNum) {
                     case 1 -> {
                         maxInputX = 9;
                         maxInputY = 9;
+                        board01.difficultySelect (difficultyNum);
                     }
                     case 2 -> {
                         maxInputX = 16;
                         maxInputY = 16;
+                        board01.difficultySelect (difficultyNum);
                     }
                     case 3 -> {
                         maxInputX = 30;
                         maxInputY = 16;
+                        board01.difficultySelect (difficultyNum);
                     }
                     default -> System.out.println(WRONG_INPUT);
                 }
@@ -36,15 +38,20 @@ public class Main {
                     break;
                 }
             }
-
             board01.initialiseBoard();
             board01.printBoard();
-            System.out.print("Please select a square to start digging \n"+ ENTER_X);
-            uX = userinput.nextInt();
-            userinput.nextLine();
-            System.out.print(ENTER_Y);
-            uY = userinput.nextInt();
-            userinput.nextLine();
+            while (true) {
+                System.out.print("Please select a square to start digging \n"+ ENTER_X);
+                uX = getInt();
+                System.out.print(ENTER_Y);
+                uY = getInt();
+                if (uX<1 || uX > maxInputX || uY < 1 || uY >maxInputY) {
+                    System.out.println(OUTSIDE_INPUT);
+                }
+                else {
+                    break;
+                }
+            }
             board01.fillBoard(uX, uY);
             board01.calcAdjacentNum();
             board01.digLand(uX,uY);
@@ -55,14 +62,12 @@ public class Main {
                 }
                 board01.printBoard();
                 System.out.println("Select an action next: \n(F)lag  or  (D)ig");
-                String input1 = userinput.nextLine();
+                String input1 = getString();
                 if (Objects.equals(input1, "F") || Objects.equals(input1, "f")) {
                     System.out.print("Please select a square to Flag \n" + ENTER_X);
-                    uX = userinput.nextInt();
-                    userinput.nextLine();
+                    uX = getInt();
                     System.out.print(ENTER_Y);
-                    uY = userinput.nextInt();
-                    userinput.nextLine();
+                    uY = getInt();
                     if(uX<1 || uX > maxInputX || uY < 1 || uY >maxInputY){
                         System.out.println(OUTSIDE_INPUT);
                     }
@@ -71,9 +76,8 @@ public class Main {
                         if (board01.winCheck()) {
                             while (true) {
                                 System.out.println("You Won! \n Do you want to try again? Y/N");
-                                input1 = userinput.nextLine();
+                                input1 = getString();
                                 if (Objects.equals(input1, "Y") || Objects.equals(input1, "y")) {
-                                    tryAgain = true;
                                     resetBoard = true;
                                     break;
                                 }
@@ -90,11 +94,9 @@ public class Main {
                 }
                 else if (Objects.equals(input1, "D") || Objects.equals(input1, "d")) {
                     System.out.print("Please select a square to dig \n"+ ENTER_X);
-                    uX = userinput.nextInt();
-                    userinput.nextLine();
+                    uX = getInt();
                     System.out.print(ENTER_Y);
-                    uY = userinput.nextInt();
-                    userinput.nextLine();
+                    uY = getInt();
                     if( uX < 1 || uX > maxInputX || uY < 1 || uY > maxInputY ){
                         System.out.println(OUTSIDE_INPUT);
                     }
@@ -105,9 +107,8 @@ public class Main {
                             board01.printBoard();
                             while (true) {
                                 System.out.println("You Lost! \nDo you want to try again? Y/N");
-                                input1 = userinput.nextLine();
+                                input1 = getString();
                                 if (Objects.equals(input1, "Y") || Objects.equals(input1, "y")) {
-                                    tryAgain = true;
                                     resetBoard = true;
                                     break;
                                 }
@@ -126,9 +127,8 @@ public class Main {
                             if (board01.winCheck()) {
                                 while (true) {
                                     System.out.println("You Won! \nDo you want to try again? Y/N");
-                                    input1 = userinput.nextLine();
+                                    input1 = getString();
                                     if (Objects.equals(input1, "Y") || Objects.equals(input1, "y")) {
-                                        tryAgain = true;
                                         resetBoard = true;
                                         break;
                                     }
@@ -156,11 +156,28 @@ public class Main {
             }
         }
     }
+    private static int getInt() {
+        int i;
+        do {
+            try {
+                i = userInput.nextInt();
+                if (i >= 0 && i <= 30) break;
+
+            }
+            catch (InputMismatchException e) {}
+            finally {
+                userInput.nextLine();
+            }
+            System.out.println("Input must be a number, try again!");
+        } while (true);
+        return i;
+    }
+    private static String getString () {
+        return userInput.nextLine();
+    }
 
     private static final String WRONG_INPUT = "Wrong input, try again!";
     private static final String OUTSIDE_INPUT = "Outside of area, try again!";
     private static final String ENTER_X = "Enter X Coordinate: ";
     private static final String ENTER_Y = "Enter Y Coordinate: ";
-
-
 }

@@ -14,22 +14,26 @@ public class Board {
     SecureRandom rand = new SecureRandom();
 
     public void difficultySelect (int num) {
-        if (num == 1) {
-            this.difficultyX = 11;
-            this.difficultyY = 11;
-            this.bombNum = 10;
-        }
-        else if (num == 2) {
-            this.difficultyX = 18;
-            this.difficultyY = 18;
-            this.bombNum = 40;
-        }
-        else {
-            this.difficultyX = 32;
-            this.difficultyY = 18;
-            this.bombNum = 99;
+        switch (num) {
+            case 1 -> {
+                this.difficultyX = 11;
+                this.difficultyY = 11;
+                this.bombNum = 10;
+            }
+            case 2 -> {
+                this.difficultyX = 18;
+                this.difficultyY = 18;
+                this.bombNum = 40;
+            }
+            case 3 -> {
+                this.difficultyX = 32;
+                this.difficultyY = 18;
+                this.bombNum = 99;
+            }
+            default -> System.out.println("Wrong input, try again!");
         }
     }
+
 
     public void initialiseBoard() {
         flagCount = 0;
