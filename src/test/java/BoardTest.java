@@ -2,11 +2,11 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 
-class BoardTest {
+public class BoardTest {
     Board testBoard = new Board();
 
     @Test
-    void testDifficultySelect() {
+    public void testDifficultySelect() {
         testBoard.difficultySelect (1);
         Assertions.assertEquals(11, testBoard.getBoardSizeX(), "Wrong Board size X");
         Assertions.assertEquals(11, testBoard.getBoardSizeY(), "Wrong Board size Y");
@@ -14,7 +14,7 @@ class BoardTest {
     }
 
     @Test
-    void testInitialiseBoard() {
+    public void testInitialiseBoard() {
         testBoard.difficultySelect (1);
         testBoard.initialiseBoard();
         for (int i = 0; i < testBoard.getBoardSizeY(); i++) {
@@ -33,7 +33,7 @@ class BoardTest {
     }
 
     @Test
-    void testPrintLand() {
+    public void testPrintLand() {
         testBoard.difficultySelect (1);
         testBoard.initialiseBoard();
         for (int i = 0; i < testBoard.getBoardSizeY(); i++) {
@@ -49,7 +49,7 @@ class BoardTest {
     }
 
     @Test
-    void testFillBoard() {
+    public void testFillBoard() {
         testBoard.difficultySelect (1);
         testBoard.initialiseBoard();
         testBoard.fillBoard(1, 1);
@@ -65,7 +65,7 @@ class BoardTest {
     }
 
     @Test
-    void testShowBombs() {
+    public void testShowBombs() {
         testBoard.difficultySelect (1);
         testBoard.initialiseBoard();
         testBoard.testFillBoard1(1,1);
@@ -80,7 +80,7 @@ class BoardTest {
     }
 
     @Test
-    void calcAdjacentNum() {
+    public void calcAdjacentNum() {
         testBoard.difficultySelect (1);
         testBoard.initialiseBoard();
         testBoard.testFillBoard1(1,1);
@@ -92,7 +92,7 @@ class BoardTest {
 
 
     @Test
-    void testShowAllNum() {
+    public void testShowAllNum() {
         testBoard.difficultySelect (1);
         testBoard.initialiseBoard();
         testBoard.testFillBoard1(1,1);
