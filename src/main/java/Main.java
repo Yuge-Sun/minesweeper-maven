@@ -7,13 +7,17 @@ public class Main {
     public static void main(String[] args) {
         Board board01 = new Board();
         while (true) {
-            int uX;
-            int uY;
+            int userInputX;
+            int userInputY;
             int maxInputX = 0;
             int maxInputY = 0;
             boolean tryAgain = true;
             boolean resetBoard = false;
-            System.out.println("Welcome to Minesweeper! Please select a difficulty:\n (1) Easy 9x9, 10 mines\n (2) Medium 16x16, 40 mines\n (3) Hard 30x16, 99 mines");
+            System.out.println("""
+                    Welcome to Minesweeper! Please select a difficulty:
+                     (1) Easy 9x9, 10 mines
+                     (2) Medium 16x16, 40 mines
+                     (3) Hard 30x16, 99 mines""");
             while (true) {
                 int difficultyNum = getInt();
                 switch (difficultyNum) {
@@ -42,20 +46,20 @@ public class Main {
             board01.printBoard();
             while (true) {
                 System.out.print("Please select a square to start digging \n"+ ENTER_X);
-                uX = getInt();
+                userInputX = getInt();
                 System.out.print(ENTER_Y);
-                uY = getInt();
-                if (uX<1 || uX > maxInputX || uY < 1 || uY >maxInputY) {
+                userInputY = getInt();
+                if (userInputX<1 || userInputX > maxInputX || userInputY < 1 || userInputY >maxInputY) {
                     System.out.println(OUTSIDE_INPUT);
                 }
                 else {
                     break;
                 }
             }
-            board01.fillBoard(uX, uY);
+            board01.fillBoard(userInputX, userInputY);
             board01.calcAdjacentNum();
-            board01.digLand(uX,uY);
-            board01.revealZeros (uX,uY);
+            board01.digLand(userInputX,userInputY);
+            board01.revealZeros (userInputX,userInputY);
             while (true){
                 if (resetBoard) {
                     break;
@@ -65,14 +69,14 @@ public class Main {
                 String input1 = getString();
                 if (Objects.equals(input1, "F") || Objects.equals(input1, "f")) {
                     System.out.print("Please select a square to Flag \n" + ENTER_X);
-                    uX = getInt();
+                    userInputX = getInt();
                     System.out.print(ENTER_Y);
-                    uY = getInt();
-                    if(uX<1 || uX > maxInputX || uY < 1 || uY >maxInputY){
+                    userInputY = getInt();
+                    if(userInputX<1 || userInputX > maxInputX || userInputY < 1 || userInputY >maxInputY){
                         System.out.println(OUTSIDE_INPUT);
                     }
                     else {
-                        board01.flagLand (uX, uY) ;
+                        board01.flagLand (userInputX, userInputY) ;
                         if (board01.winCheck()) {
                             while (true) {
                                 System.out.println("You Won! \n Do you want to try again? Y/N");
@@ -94,14 +98,14 @@ public class Main {
                 }
                 else if (Objects.equals(input1, "D") || Objects.equals(input1, "d")) {
                     System.out.print("Please select a square to dig \n"+ ENTER_X);
-                    uX = getInt();
+                    userInputX = getInt();
                     System.out.print(ENTER_Y);
-                    uY = getInt();
-                    if( uX < 1 || uX > maxInputX || uY < 1 || uY > maxInputY ){
+                    userInputY = getInt();
+                    if( userInputX < 1 || userInputX > maxInputX || userInputY < 1 || userInputY > maxInputY ){
                         System.out.println(OUTSIDE_INPUT);
                     }
                     else {
-                        if (board01.isBomb(uX, uY)) {
+                        if (board01.isBomb(userInputX, userInputY)) {
                             board01.showAllNum();
                             board01.showBombs ();
                             board01.printBoard();
@@ -122,8 +126,8 @@ public class Main {
                             }
                         }
                         else {
-                            board01.digLand(uX, uY);
-                            board01.revealZeros (uX,uY);
+                            board01.digLand(userInputX, userInputY);
+                            board01.revealZeros (userInputX,userInputY);
                             if (board01.winCheck()) {
                                 while (true) {
                                     System.out.println("You Won! \nDo you want to try again? Y/N");
@@ -161,14 +165,20 @@ public class Main {
         do {
             try {
                 i = userInput.nextInt();
-                if (i >= 0 && i <= 30) break;
+                if (i > 0 && i <= 30) {
+                    break;
+                }
+                else {
+                    System.out.println(WRONG_INPUT);
+                }
 
             }
-            catch (InputMismatchException e) {}
+            catch (InputMismatchException e) {
+                System.out.println("Input must be a number, try again!");
+            }
             finally {
                 userInput.nextLine();
             }
-            System.out.println("Input must be a number, try again!");
         } while (true);
         return i;
     }

@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Board.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">minesweeper-maven</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">Board.java</span></div><h1>Board.java</h1><pre class="source lang-java linenums">import java.security.SecureRandom;
+import java.util.Objects;
+
+<span class="nc" id="L4">public class Board {</span>
+
+    int boardSizeX;
+    int boardSizeY;
+    int bombNum;
+<span class="nc" id="L9">    boolean[][] bombGrid = new boolean[boardSizeY][boardSizeX];</span>
+<span class="nc" id="L10">    String [][] uiGrid = new String[boardSizeY][boardSizeX];</span>
+<span class="nc" id="L11">    int[][] adjacentNum = new int [boardSizeY][boardSizeX];</span>
+<span class="nc" id="L12">    int flagCount = 0;</span>
+<span class="nc" id="L13">    SecureRandom rand = new SecureRandom();</span>
+
+
+    public int getBoardSizeX() {
+<span class="nc" id="L17">        return boardSizeX;</span>
+    }
+
+    public int getBoardSizeY() {
+<span class="nc" id="L21">        return boardSizeY;</span>
+    }
+
+    public int getBombNum() {
+<span class="nc" id="L25">        return bombNum;</span>
+    }
+
+    public boolean getBombGrid(int i, int j) {
+<span class="nc" id="L29">        return bombGrid[i][j];</span>
+    }
+
+    public String getUiGrid(int i, int j) {
+<span class="nc" id="L33">        return uiGrid[i][j];</span>
+    }
+
+    public int getAdjacentNum(int i, int j) {
+<span class="nc" id="L37">        return adjacentNum[i][j];</span>
+    }
+
+    public void difficultySelect (int num) {
+<span class="nc bnc" id="L41" title="All 4 branches missed.">        switch (num) {</span>
+            case 1 -&gt; {
+<span class="nc" id="L43">                this.boardSizeX = 11;</span>
+<span class="nc" id="L44">                this.boardSizeY = 11;</span>
+<span class="nc" id="L45">                this.bombNum = 10;</span>
+<span class="nc" id="L46">            }</span>
+            case 2 -&gt; {
+<span class="nc" id="L48">                this.boardSizeX = 18;</span>
+<span class="nc" id="L49">                this.boardSizeY = 18;</span>
+<span class="nc" id="L50">                this.bombNum = 40;</span>
+<span class="nc" id="L51">            }</span>
+            case 3 -&gt; {
+<span class="nc" id="L53">                this.boardSizeX = 32;</span>
+<span class="nc" id="L54">                this.boardSizeY = 18;</span>
+<span class="nc" id="L55">                this.bombNum = 99;</span>
+<span class="nc" id="L56">            }</span>
+<span class="nc" id="L57">            default -&gt; System.out.println(&quot;Wrong input, try again!&quot;);</span>
+        }
+<span class="nc" id="L59">    }</span>
+
+    public void initialiseBoard() {
+<span class="nc" id="L62">        flagCount = 0;</span>
+<span class="nc" id="L63">        bombGrid = new boolean[boardSizeY][boardSizeX];</span>
+<span class="nc" id="L64">        uiGrid = new String[boardSizeY][boardSizeX];</span>
+<span class="nc" id="L65">        adjacentNum = new int [boardSizeY][boardSizeX];</span>
+<span class="nc bnc" id="L66" title="All 2 branches missed.">        for (int i = 0; i &lt; boardSizeY; i++) {</span>
+<span class="nc bnc" id="L67" title="All 2 branches missed.">            for (int j = 0; j &lt; boardSizeX; j++) {</span>
+<span class="nc" id="L68">                this.bombGrid[i][j] = false;</span>
+<span class="nc bnc" id="L69" title="All 8 branches missed.">                if (i == 0 || i == boardSizeY -1 || j == 0 || j == boardSizeX -1) {</span>
+<span class="nc" id="L70">                    this.adjacentNum[i][j] = -1;</span>
+<span class="nc" id="L71">                    this.uiGrid[i][j] = &quot; &quot;;</span>
+                }
+                else {
+<span class="nc" id="L74">                    this.adjacentNum[i][j] = 0;</span>
+<span class="nc" id="L75">                    this.uiGrid[i][j] = &quot;◻&quot;;</span>
+                }
+            }
+        }
+<span class="nc" id="L79">    }</span>
+
+    public String printLand(int i, int j) {
+<span class="nc bnc" id="L82" title="All 4 branches missed.">        if (Objects.equals(uiGrid[i][j], &quot;F&quot;) || Objects.equals(uiGrid[i][j], &quot;B&quot;) ){</span>
+<span class="nc" id="L83">            return ANSI_RED + uiGrid[i][j] + ANSI_RESET;</span>
+        }
+<span class="nc bnc" id="L85" title="All 2 branches missed.">        else if (Objects.equals(uiGrid[i][j], &quot;0&quot;)) {</span>
+<span class="nc" id="L86">            return uiGrid[i][j];</span>
+        }
+        else {
+<span class="nc" id="L89">            return ANSI_GREEN + uiGrid[i][j] + ANSI_RESET;</span>
+        }
+    }
+
+    public void printBoard() {
+<span class="nc bnc" id="L94" title="All 2 branches missed.">        for  (int x = 1; x &lt; boardSizeX -1 ; x++) {</span>
+<span class="nc" id="L95">            System.out.print(ANSI_CYAN+&quot;\t&quot;+x+ANSI_RESET );</span>
+        }
+<span class="nc" id="L97">        System.out.print(&quot;\n&quot;);</span>
+<span class="nc bnc" id="L98" title="All 2 branches missed.">        for (int i = 1; i &lt; boardSizeY -1 ; i++){</span>
+<span class="nc bnc" id="L99" title="All 2 branches missed.">            for (int j = 0; j &lt; boardSizeX -1 ; j++) {</span>
+<span class="nc bnc" id="L100" title="All 2 branches missed.">                if (j == 0) {</span>
+<span class="nc" id="L101">                    System.out.print(ANSI_CYAN + i + ANSI_RESET +&quot;\t&quot;);</span>
+                }
+                else {
+<span class="nc" id="L104">                    System.out.print(printLand(i,j)+&quot;\t&quot;);</span>
+                }
+<span class="nc bnc" id="L106" title="All 2 branches missed.">                if (j == boardSizeX -2 ) {</span>
+<span class="nc" id="L107">                    System.out.print(&quot;\n&quot;);</span>
+                }
+            }
+        }
+<span class="nc" id="L111">    }</span>
+
+    public void fillBoard(int x, int y) {
+<span class="nc" id="L114">        int numOfBombs = 0;</span>
+<span class="nc bnc" id="L115" title="All 2 branches missed.">        while (numOfBombs &lt; bombNum) {</span>
+<span class="nc bnc" id="L116" title="All 2 branches missed.">            for (int i = 1; i &lt; boardSizeY -1 ; i++) {</span>
+<span class="nc bnc" id="L117" title="All 2 branches missed.">                for (int j = 1; j &lt; boardSizeX -1 ; j++) {</span>
+<span class="nc bnc" id="L118" title="All 6 branches missed.">                    if (!(i == y &amp;&amp; j == x) &amp;&amp; !bombGrid[i][j]) {</span>
+<span class="nc" id="L119">                        int n = rand.nextInt(100);</span>
+<span class="nc bnc" id="L120" title="All 4 branches missed.">                        if (n == 1 &amp;&amp; numOfBombs != bombNum) {</span>
+<span class="nc" id="L121">                            bombGrid[i][j] = true;</span>
+<span class="nc" id="L122">                            numOfBombs++;</span>
+                        }
+                    }
+                }
+            }
+        }
+<span class="nc" id="L128">    }</span>
+
+    public void testFillBoard1(int x, int y) {
+<span class="nc" id="L131">        int numOfBombs = 0;</span>
+<span class="nc" id="L132">        bombNum = 2;</span>
+<span class="nc bnc" id="L133" title="All 2 branches missed.">        while (numOfBombs &lt; bombNum) {</span>
+<span class="nc bnc" id="L134" title="All 2 branches missed.">            for (int i = 1; i &lt; boardSizeY -1 ; i++) {</span>
+<span class="nc bnc" id="L135" title="All 2 branches missed.">                for (int j = 1; j &lt; boardSizeX -1 ; j++) {</span>
+<span class="nc bnc" id="L136" title="All 6 branches missed.">                    if (!(i == y &amp;&amp; j == x) &amp;&amp; !bombGrid[i][j]) {</span>
+<span class="nc" id="L137">                        int n = 1;</span>
+<span class="nc bnc" id="L138" title="All 4 branches missed.">                        if (n == 1 &amp;&amp; numOfBombs != bombNum) {</span>
+<span class="nc" id="L139">                            bombGrid[i][j] = true;</span>
+<span class="nc" id="L140">                            numOfBombs++;</span>
+                        }
+                    }
+                }
+            }
+        }
+<span class="nc" id="L146">    }</span>
+
+    public void showBombs () {
+<span class="nc bnc" id="L149" title="All 2 branches missed.">        for (int i = 1; i &lt; boardSizeY; i++) {</span>
+<span class="nc bnc" id="L150" title="All 2 branches missed.">            for (int j = 1; j &lt; boardSizeX; j++) {</span>
+<span class="nc bnc" id="L151" title="All 2 branches missed.">                if (bombGrid[i][j]) {</span>
+<span class="nc" id="L152">                    uiGrid[i][j] = &quot;B&quot;;</span>
+                }
+            }
+        }
+<span class="nc" id="L156">    }</span>
+
+    public void showAllNum () {
+<span class="nc bnc" id="L159" title="All 2 branches missed.">        for (int i = 1; i &lt; boardSizeY -1 ; i++) {</span>
+<span class="nc bnc" id="L160" title="All 2 branches missed.">            for (int j = 1; j &lt; boardSizeX -1 ; j++) {</span>
+<span class="nc" id="L161">                uiGrid[i][j] = String.valueOf(adjacentNum[i][j]);</span>
+            }
+        }
+<span class="nc" id="L164">    }</span>
+
+    public void calcAdjacentNum () {
+<span class="nc bnc" id="L167" title="All 2 branches missed.">        for (int i = 1; i &lt; boardSizeY -1 ; i++) {</span>
+<span class="nc bnc" id="L168" title="All 2 branches missed.">            for (int j = 1; j &lt; boardSizeX -1 ; j++) {</span>
+<span class="nc bnc" id="L169" title="All 2 branches missed.">                for (int k = -1; k &lt;2; k++) {</span>
+<span class="nc bnc" id="L170" title="All 2 branches missed.">                    for (int l = -1; l &lt;2; l++) {</span>
+<span class="nc bnc" id="L171" title="All 4 branches missed.">                        if (!(k==0 &amp;&amp; l==0)) {</span>
+<span class="nc bnc" id="L172" title="All 2 branches missed.">                            if (bombGrid[i + k][j + l]) {</span>
+<span class="nc" id="L173">                                adjacentNum[i][j] += 1;</span>
+                            }
+                        }
+                    }
+                }
+            }
+        }
+<span class="nc" id="L180">    }</span>
+
+    public void flagLand (int x, int y) {
+<span class="nc bnc" id="L183" title="All 2 branches missed.">        if (Objects.equals(uiGrid[y][x], &quot;◻&quot;)) {</span>
+<span class="nc" id="L184">            uiGrid[y][x] = &quot;F&quot;;</span>
+<span class="nc" id="L185">            flagCount++;</span>
+        }
+<span class="nc bnc" id="L187" title="All 2 branches missed.">        else if (Objects.equals(uiGrid[y][x], &quot;F&quot;)) {</span>
+<span class="nc" id="L188">            uiGrid[y][x] = &quot;◻&quot;;</span>
+<span class="nc" id="L189">            flagCount--;</span>
+        }
+        else {
+<span class="nc" id="L192">            System.out.println(&quot;Already dug, try again \n&quot;);</span>
+        }
+<span class="nc" id="L194">    }</span>
+
+    public boolean isBomb (int x, int y) {
+<span class="nc" id="L197">        return bombGrid[y][x];</span>
+    }
+
+    public void digLand (int x, int y) {
+<span class="nc bnc" id="L201" title="All 4 branches missed.">        if (Objects.equals(uiGrid[y][x], &quot;◻&quot;) || Objects.equals(uiGrid[y][x], &quot;F&quot;)) {</span>
+<span class="nc" id="L202">            uiGrid[y][x] = String.valueOf(adjacentNum[y][x]);</span>
+        }
+        else {
+<span class="nc" id="L205">            System.out.println(&quot;Already dug, try again \n&quot;);</span>
+        }
+<span class="nc" id="L207">    }</span>
+
+    public void revealZeros (int x, int y) {
+<span class="nc bnc" id="L210" title="All 2 branches missed.">        if (adjacentNum[y][x] == 0) {</span>
+<span class="nc bnc" id="L211" title="All 2 branches missed.">            for (int k = -1; k &lt; 2; k++) {</span>
+<span class="nc bnc" id="L212" title="All 2 branches missed.">                for (int l = -1; l &lt; 2; l++) {</span>
+<span class="nc bnc" id="L213" title="All 4 branches missed.">                    if (!(k == 0 &amp;&amp; l == 0)) {</span>
+<span class="nc bnc" id="L214" title="All 2 branches missed.">                        if (Objects.equals(uiGrid[y + k][x + l], &quot;◻&quot;)) {</span>
+<span class="nc bnc" id="L215" title="All 2 branches missed.">                            if (adjacentNum[y + k][x + l] == 0) {</span>
+<span class="nc" id="L216">                                uiGrid[y + k][x + l] = String.valueOf(adjacentNum[y + k][x + l]);</span>
+<span class="nc" id="L217">                                revealZeros(x + l, y + k);</span>
+                            }
+                            else {
+<span class="nc" id="L220">                                uiGrid[y + k][x + l] = String.valueOf(adjacentNum[y + k][x + l]);</span>
+                            }
+                        }
+                    }
+                }
+            }
+        }
+<span class="nc" id="L227">    }</span>
+
+    public boolean winCheck () {
+<span class="nc" id="L230">        int correctFlag = 0;</span>
+<span class="nc bnc" id="L231" title="All 2 branches missed.">        for (int i = 1; i &lt; boardSizeY -1; i++) {</span>
+<span class="nc bnc" id="L232" title="All 2 branches missed.">            for (int j = 1; j &lt; boardSizeX -1; j++) {</span>
+<span class="nc bnc" id="L233" title="All 2 branches missed.">                if (Objects.equals(uiGrid[i][j], &quot;◻&quot;)) {</span>
+<span class="nc" id="L234">                    return false;</span>
+                }
+<span class="nc bnc" id="L236" title="All 2 branches missed.">                else if (Objects.equals(uiGrid[i][j], &quot;F&quot;)) {</span>
+<span class="nc bnc" id="L237" title="All 2 branches missed.">                    if (bombGrid[i][j]) {</span>
+<span class="nc" id="L238">                        correctFlag++;</span>
+                    }
+                    else {
+<span class="nc" id="L241">                        return false;</span>
+                    }
+                }
+            }
+        }
+<span class="nc bnc" id="L246" title="All 2 branches missed.">        return correctFlag == bombNum;</span>
+    }
+
+
+    private static final String ANSI_RESET = &quot;\u001B[0m&quot;;
+    private static final String ANSI_RED = &quot;\u001B[31m&quot;;
+    private static final String ANSI_GREEN = &quot;\u001B[32m&quot;;
+    private static final String ANSI_CYAN = &quot;\u001B[36m&quot;;
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>

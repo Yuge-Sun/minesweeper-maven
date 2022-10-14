@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Main.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">minesweeper-maven</a> &gt; <a href="index.source.html" class="el_package">default</a> &gt; <span class="el_source">Main.java</span></div><h1>Main.java</h1><pre class="source lang-java linenums">import java.util.InputMismatchException;
+import java.util.Objects;
+import java.util.Scanner;
+
+<span class="nc" id="L5">public class Main {</span>
+<span class="nc" id="L6">    static Scanner userInput = new Scanner(System.in);</span>
+    public static void main(String[] args) {
+<span class="nc" id="L8">        Board board01 = new Board();</span>
+        while (true) {
+            int userInputX;
+            int userInputY;
+<span class="nc" id="L12">            int maxInputX = 0;</span>
+<span class="nc" id="L13">            int maxInputY = 0;</span>
+<span class="nc" id="L14">            boolean tryAgain = true;</span>
+<span class="nc" id="L15">            boolean resetBoard = false;</span>
+<span class="nc" id="L16">            System.out.println(&quot;&quot;&quot;</span>
+                    Welcome to Minesweeper! Please select a difficulty:
+                     (1) Easy 9x9, 10 mines
+                     (2) Medium 16x16, 40 mines
+                     (3) Hard 30x16, 99 mines&quot;&quot;&quot;);
+            while (true) {
+<span class="nc" id="L22">                int difficultyNum = getInt();</span>
+<span class="nc bnc" id="L23" title="All 4 branches missed.">                switch (difficultyNum) {</span>
+                    case 1 -&gt; {
+<span class="nc" id="L25">                        maxInputX = 9;</span>
+<span class="nc" id="L26">                        maxInputY = 9;</span>
+<span class="nc" id="L27">                        board01.difficultySelect (difficultyNum);</span>
+<span class="nc" id="L28">                    }</span>
+                    case 2 -&gt; {
+<span class="nc" id="L30">                        maxInputX = 16;</span>
+<span class="nc" id="L31">                        maxInputY = 16;</span>
+<span class="nc" id="L32">                        board01.difficultySelect (difficultyNum);</span>
+<span class="nc" id="L33">                    }</span>
+                    case 3 -&gt; {
+<span class="nc" id="L35">                        maxInputX = 30;</span>
+<span class="nc" id="L36">                        maxInputY = 16;</span>
+<span class="nc" id="L37">                        board01.difficultySelect (difficultyNum);</span>
+<span class="nc" id="L38">                    }</span>
+<span class="nc" id="L39">                    default -&gt; System.out.println(WRONG_INPUT);</span>
+                }
+<span class="nc bnc" id="L41" title="All 6 branches missed.">                if (difficultyNum == 1 || difficultyNum == 2 ||difficultyNum == 3 ) {</span>
+<span class="nc" id="L42">                    break;</span>
+                }
+<span class="nc" id="L44">            }</span>
+<span class="nc" id="L45">            board01.initialiseBoard();</span>
+<span class="nc" id="L46">            board01.printBoard();</span>
+            while (true) {
+<span class="nc" id="L48">                System.out.print(&quot;Please select a square to start digging \n&quot;+ ENTER_X);</span>
+<span class="nc" id="L49">                userInputX = getInt();</span>
+<span class="nc" id="L50">                System.out.print(ENTER_Y);</span>
+<span class="nc" id="L51">                userInputY = getInt();</span>
+<span class="nc bnc" id="L52" title="All 8 branches missed.">                if (userInputX&lt;1 || userInputX &gt; maxInputX || userInputY &lt; 1 || userInputY &gt;maxInputY) {</span>
+<span class="nc" id="L53">                    System.out.println(OUTSIDE_INPUT);</span>
+                }
+                else {
+                    break;
+                }
+            }
+<span class="nc" id="L59">            board01.fillBoard(userInputX, userInputY);</span>
+<span class="nc" id="L60">            board01.calcAdjacentNum();</span>
+<span class="nc" id="L61">            board01.digLand(userInputX,userInputY);</span>
+<span class="nc" id="L62">            board01.revealZeros (userInputX,userInputY);</span>
+            while (true){
+<span class="nc bnc" id="L64" title="All 2 branches missed.">                if (resetBoard) {</span>
+<span class="nc" id="L65">                    break;</span>
+                }
+<span class="nc" id="L67">                board01.printBoard();</span>
+<span class="nc" id="L68">                System.out.println(&quot;Select an action next: \n(F)lag  or  (D)ig&quot;);</span>
+<span class="nc" id="L69">                String input1 = getString();</span>
+<span class="nc bnc" id="L70" title="All 4 branches missed.">                if (Objects.equals(input1, &quot;F&quot;) || Objects.equals(input1, &quot;f&quot;)) {</span>
+<span class="nc" id="L71">                    System.out.print(&quot;Please select a square to Flag \n&quot; + ENTER_X);</span>
+<span class="nc" id="L72">                    userInputX = getInt();</span>
+<span class="nc" id="L73">                    System.out.print(ENTER_Y);</span>
+<span class="nc" id="L74">                    userInputY = getInt();</span>
+<span class="nc bnc" id="L75" title="All 8 branches missed.">                    if(userInputX&lt;1 || userInputX &gt; maxInputX || userInputY &lt; 1 || userInputY &gt;maxInputY){</span>
+<span class="nc" id="L76">                        System.out.println(OUTSIDE_INPUT);</span>
+                    }
+                    else {
+<span class="nc" id="L79">                        board01.flagLand (userInputX, userInputY) ;</span>
+<span class="nc bnc" id="L80" title="All 2 branches missed.">                        if (board01.winCheck()) {</span>
+                            while (true) {
+<span class="nc" id="L82">                                System.out.println(&quot;You Won! \n Do you want to try again? Y/N&quot;);</span>
+<span class="nc" id="L83">                                input1 = getString();</span>
+<span class="nc bnc" id="L84" title="All 4 branches missed.">                                if (Objects.equals(input1, &quot;Y&quot;) || Objects.equals(input1, &quot;y&quot;)) {</span>
+<span class="nc" id="L85">                                    resetBoard = true;</span>
+<span class="nc" id="L86">                                    break;</span>
+                                }
+<span class="nc bnc" id="L88" title="All 4 branches missed.">                                else if (Objects.equals(input1, &quot;N&quot;) || Objects.equals(input1, &quot;n&quot;)) {</span>
+<span class="nc" id="L89">                                    tryAgain = false;</span>
+<span class="nc" id="L90">                                    break;</span>
+                                }
+                                else {
+<span class="nc" id="L93">                                    System.out.println(WRONG_INPUT);</span>
+                                }
+                            }
+                        }
+                    }
+                }
+<span class="nc bnc" id="L99" title="All 4 branches missed.">                else if (Objects.equals(input1, &quot;D&quot;) || Objects.equals(input1, &quot;d&quot;)) {</span>
+<span class="nc" id="L100">                    System.out.print(&quot;Please select a square to dig \n&quot;+ ENTER_X);</span>
+<span class="nc" id="L101">                    userInputX = getInt();</span>
+<span class="nc" id="L102">                    System.out.print(ENTER_Y);</span>
+<span class="nc" id="L103">                    userInputY = getInt();</span>
+<span class="nc bnc" id="L104" title="All 8 branches missed.">                    if( userInputX &lt; 1 || userInputX &gt; maxInputX || userInputY &lt; 1 || userInputY &gt; maxInputY ){</span>
+<span class="nc" id="L105">                        System.out.println(OUTSIDE_INPUT);</span>
+                    }
+                    else {
+<span class="nc bnc" id="L108" title="All 2 branches missed.">                        if (board01.isBomb(userInputX, userInputY)) {</span>
+<span class="nc" id="L109">                            board01.showAllNum();</span>
+<span class="nc" id="L110">                            board01.showBombs ();</span>
+<span class="nc" id="L111">                            board01.printBoard();</span>
+                            while (true) {
+<span class="nc" id="L113">                                System.out.println(&quot;You Lost! \nDo you want to try again? Y/N&quot;);</span>
+<span class="nc" id="L114">                                input1 = getString();</span>
+<span class="nc bnc" id="L115" title="All 4 branches missed.">                                if (Objects.equals(input1, &quot;Y&quot;) || Objects.equals(input1, &quot;y&quot;)) {</span>
+<span class="nc" id="L116">                                    resetBoard = true;</span>
+<span class="nc" id="L117">                                    break;</span>
+                                }
+<span class="nc bnc" id="L119" title="All 4 branches missed.">                                else if (Objects.equals(input1, &quot;N&quot;) || Objects.equals(input1, &quot;n&quot;)) {</span>
+<span class="nc" id="L120">                                    tryAgain = false;</span>
+<span class="nc" id="L121">                                    break;</span>
+                                }
+                                else {
+<span class="nc" id="L124">                                    System.out.println(WRONG_INPUT);</span>
+                                }
+                            }
+                        }
+                        else {
+<span class="nc" id="L129">                            board01.digLand(userInputX, userInputY);</span>
+<span class="nc" id="L130">                            board01.revealZeros (userInputX,userInputY);</span>
+<span class="nc bnc" id="L131" title="All 2 branches missed.">                            if (board01.winCheck()) {</span>
+                                while (true) {
+<span class="nc" id="L133">                                    System.out.println(&quot;You Won! \nDo you want to try again? Y/N&quot;);</span>
+<span class="nc" id="L134">                                    input1 = getString();</span>
+<span class="nc bnc" id="L135" title="All 4 branches missed.">                                    if (Objects.equals(input1, &quot;Y&quot;) || Objects.equals(input1, &quot;y&quot;)) {</span>
+<span class="nc" id="L136">                                        resetBoard = true;</span>
+<span class="nc" id="L137">                                        break;</span>
+                                    }
+<span class="nc bnc" id="L139" title="All 4 branches missed.">                                    else if (Objects.equals(input1, &quot;N&quot;) || Objects.equals(input1, &quot;n&quot;)) {</span>
+<span class="nc" id="L140">                                        tryAgain = false;</span>
+<span class="nc" id="L141">                                        break;</span>
+                                    }
+                                    else {
+<span class="nc" id="L144">                                        System.out.println(WRONG_INPUT);</span>
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                else {
+<span class="nc" id="L152">                    System.out.println(WRONG_INPUT);</span>
+                }
+<span class="nc bnc" id="L154" title="All 2 branches missed.">                if (!tryAgain) {</span>
+<span class="nc" id="L155">                    break;</span>
+                }
+<span class="nc" id="L157">            }</span>
+<span class="nc bnc" id="L158" title="All 2 branches missed.">            if (!tryAgain) {</span>
+<span class="nc" id="L159">                break;</span>
+            }
+<span class="nc" id="L161">        }</span>
+<span class="nc" id="L162">    }</span>
+    private static int getInt() {
+        int i;
+        do {
+            try {
+<span class="nc" id="L167">                i = userInput.nextInt();</span>
+<span class="nc bnc" id="L168" title="All 4 branches missed.">                if (i &gt; 0 &amp;&amp; i &lt;= 30) {</span>
+                    break;
+                }
+                else {
+<span class="nc" id="L172">                    System.out.println(WRONG_INPUT);</span>
+                }
+
+            }
+<span class="nc" id="L176">            catch (InputMismatchException e) {</span>
+<span class="nc" id="L177">                System.out.println(&quot;Input must be a number, try again!&quot;);</span>
+            }
+            finally {
+<span class="nc" id="L180">                userInput.nextLine();</span>
+            }
+<span class="nc" id="L182">        } while (true);</span>
+<span class="nc" id="L183">        return i;</span>
+    }
+    private static String getString () {
+<span class="nc" id="L186">        return userInput.nextLine();</span>
+    }
+
+    private static final String WRONG_INPUT = &quot;Wrong input, try again!&quot;;
+    private static final String OUTSIDE_INPUT = &quot;Outside of area, try again!&quot;;
+    private static final String ENTER_X = &quot;Enter X Coordinate: &quot;;
+    private static final String ENTER_Y = &quot;Enter Y Coordinate: &quot;;
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.8.202204050719</span></div></body></html>
